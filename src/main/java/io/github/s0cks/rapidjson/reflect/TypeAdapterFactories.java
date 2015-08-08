@@ -4,11 +4,11 @@
 package io.github.s0cks.rapidjson.reflect;
 
 import io.github.s0cks.rapidjson.Value;
-import io.github.s0cks.rapidjson.Values;
+import io.github.s0cks.rapidjson.io.JsonOutputStream;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -36,8 +36,12 @@ final class TypeAdapterFactories{
          * @see io.github.s0cks.rapidjson.reflect.TypeAdapter#serialize(java.lang.Object)
          */
         @Override
-        public Value serialize(T value) {
-            return new Values.StringValue(value.name());
+        public void serialize(T value, JsonOutputStream jos) {
+            try {
+                jos.value(value.name());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -63,7 +67,7 @@ final class TypeAdapterFactories{
     public static final TypeAdapterFactory COLLECTION_FACTORY = new TypeAdapterFactory() {
         @Override
         public <T> boolean can(TypeToken<T> token) {
-            return List.class.isAssignableFrom(token.rawType);
+            return Collection.class.isAssignableFrom(token.rawType);
         }
 
         @Override
@@ -142,8 +146,14 @@ final class TypeAdapterFactories{
          * @see io.github.s0cks.rapidjson.reflect.TypeAdapter#serialize(java.lang.Object)
          */
         @Override
-        public Value serialize(Collection<T> value) {
-            return null;
+        public void serialize(Collection<T> value, JsonOutputStream jos) {
+            try {
+                jos.newArray();
+
+                jos.endArray();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

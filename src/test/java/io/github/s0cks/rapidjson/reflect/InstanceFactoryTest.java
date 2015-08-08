@@ -8,8 +8,7 @@ import io.github.s0cks.rapidjson.RapidJsonBuilder;
 import io.github.s0cks.rapidjson.SerializedName;
 
 import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,25 +18,6 @@ import java.util.concurrent.TimeUnit;
  * The Class InstanceFactoryTest.
  */
 public class InstanceFactoryTest {
-    
-    /** The json. */
-    private static String json;
-
-    static{
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(System.class.getResourceAsStream("/test.json")))){
-            String line;
-            StringBuilder builder = new StringBuilder();
-            while((line = reader.readLine()) != null){
-                builder.append(line);
-            }
-
-            json = builder.toString();
-        } catch(Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    /** The Constant rapidJson. */
     private static final RapidJson rapidJson = new RapidJsonBuilder()
             .build();
 
@@ -49,11 +29,15 @@ public class InstanceFactoryTest {
      */
     public static void main(String... args)
     throws Exception{
-        long start = System.nanoTime();
-        List<Name> names = rapidJson.fromJson(json, new TypeToken<LinkedList<Name>>(){});
-        System.out.println("Deserialization Took: " + TimeUnit.NANOSECONDS.toMillis((System.nanoTime() - start)) + "ms");
-        for(Name name : names){
-            System.out.println(name);
+        long start;
+        List<Name> names;
+        try(InputStream in = System.class.getResourceAsStream("/test.json")){
+            start = System.nanoTime();
+            names = rapidJson.fromJson(in, new TypeToken<LinkedList<Name>>(){});
+            System.out.println("Deserialization Took: " + TimeUnit.NANOSECONDS.toMillis((System.nanoTime() - start)) + "ms");
+            for(Name name : names){
+                System.out.println(name);
+            }
         }
 
         start = System.nanoTime();

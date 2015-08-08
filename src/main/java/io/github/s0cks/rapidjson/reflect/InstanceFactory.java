@@ -4,11 +4,12 @@
 package io.github.s0cks.rapidjson.reflect;
 
 import io.github.s0cks.rapidjson.JsonException;
-import io.github.s0cks.rapidjson.SerializedName;
 import io.github.s0cks.rapidjson.RapidJson;
+import io.github.s0cks.rapidjson.SerializedName;
 import io.github.s0cks.rapidjson.Value;
-import io.github.s0cks.rapidjson.Values;
+import io.github.s0cks.rapidjson.io.JsonOutputStream;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
@@ -65,45 +66,6 @@ public final class InstanceFactory{
         return this.getAdapter(new TypeToken(t));
     }
 
-    /**
-     * Emit.
-     *
-     * @param <T> the generic type
-     * @param t the t
-     * @param root the root
-     * @throws IllegalAccessException the illegal access exception
-     * @throws JsonException the json exception
-     */
-    @SuppressWarnings("unchecked")
-    public <T> void emit(T t, Value root)
-    throws IllegalAccessException, JsonException {
-        for(Field field : t.getClass().getDeclaredFields()){
-            if(!field.isAccessible()){
-                field.setAccessible(true);
-            }
-
-            TypeToken token = TypeToken.of(field);
-            Type type = Types.unbox(token.type);
-            if(Types.array(type)){
-                type = Types.unbox(((GenericArrayType) type).getGenericComponentType());
-                Object array = field.get(t);
-                Value[] values = new Value[Array.getLength(array)];
-                for(int i = 0; i < values.length; i++){
-                    values[i] = (isGeneric(type) ? Values.of(Array.get(array, i)) : (this.adapters.get(type) != null ? this.adapters.get(type).serialize(Array.get(array, i)) : Values.NullValue.NULL));
-                }
-                root.setValue(this.getFieldName(field), new Values.ArrayValue(values));
-            } else{
-                this.emitField(t, field, type, root);
-            }
-        }
-    }
-
-    /**
-     * Gets the field name.
-     *
-     * @param f the f
-     * @return the field name
-     */
     private String getFieldName(Field f){
         return f.isAnnotationPresent(SerializedName.class) ? f.getAnnotation(SerializedName.class).value() : f.getName();
     }
@@ -120,14 +82,41 @@ public final class InstanceFactory{
      * @throws JsonException the json exception
      */
     @SuppressWarnings("unchecked")
-    private <T> void emitField(T instance, Field f, Type type, Value root)
-    throws IllegalAccessException, JsonException {
-        if(isGeneric(type)){
-            root.setValue(this.getFieldName(f), Values.of(instance, f));
-        } else if(this.adapters.containsKey(type)){
-            root.setValue(this.getFieldName(f), this.adapters.get(type).serialize(f.get(instance)));
+    public <T> void write(T t, JsonOutputStream json)
+    throws IOException, IllegalAccessException {
+        TypeToken tToken = TypeToken.of(t.getClass());
+        TypeAdapter<T> tAdapter = this.getAdapter(tToken);
+        if(tAdapter != null){
+            tAdapter.serialize(t, json);
+        }
+
+        if(Types.array(tToken.type)){
+            json.newArray();
+
+            json.endArray();
         } else{
-            throw new JsonException("No type adapter for type: " + type);
+            json.newObject();
+
+            for(int i = 0; i < t.getClass().getDeclaredFields().length; i++){
+                Field field = t.getClass().getDeclaredFields()[i];
+                if(!Modifier.isStatic(field.getModifiers())){
+                    if(!field.isAccessible()){
+                        field.setAccessible(true);
+                    }
+
+                    TypeToken fToken = TypeToken.of(field);
+                    Type fType = Types.unbox(fToken.type);
+                    if(isGeneric(fType)){
+                        this.writePrimitiveField(fType, t, field, json);
+                    }
+
+                    if(i < t.getClass().getDeclaredFields().length - 1){
+                        json.next();
+                    }
+                }
+            }
+
+            json.endObject();
         }
     }
 
@@ -314,13 +303,36 @@ public final class InstanceFactory{
         }
     }
 
-    /**
-     * Checks if is generic.
-     *
-     * @param raw the raw
-     * @return true, if is generic
-     */
-    private static boolean isGeneric(Type raw){
+    private void writePrimitiveField(Type raw, Object instance, Field f, JsonOutputStream jos)
+    throws IOException, IllegalAccessException{
+        if(raw.equals(Types.TYPE_BOOLEAN)){
+            jos.name(this.getFieldName(f))
+               .value(f.getBoolean(instance));
+        } else if(raw.equals(Types.TYPE_BYTE)){
+            jos.name(this.getFieldName(f))
+                .value(f.getByte(instance));
+        } else if(raw.equals(Types.TYPE_DOUBLE)){
+            jos.name(this.getFieldName(f))
+                .value(f.getDouble(instance));
+        } else if(raw.equals(Types.TYPE_FLOAT)){
+            jos.name(this.getFieldName(f))
+                .value(f.getFloat(instance));
+        } else if(raw.equals(Types.TYPE_INTEGER)){
+            jos.name(this.getFieldName(f))
+                .value(f.getInt(instance));
+        } else if(raw.equals(Types.TYPE_LONG)){
+            jos.name(this.getFieldName(f))
+                .value(f.getLong(instance));
+        } else if(raw.equals(Types.TYPE_SHORT)){
+            jos.name(this.getFieldName(f))
+                .value(f.getShort(instance));
+        } else if(raw.equals(Types.TYPE_STRING)){
+            jos.name(this.getFieldName(f))
+                .value((String) f.get(instance));
+        }
+    }
+
+    private boolean isGeneric(Type raw){
         return raw.equals(Types.TYPE_BOOLEAN)
             || raw.equals(Types.TYPE_BYTE)
             || raw.equals(Types.TYPE_DOUBLE)
