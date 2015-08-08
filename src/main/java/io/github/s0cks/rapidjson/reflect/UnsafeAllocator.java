@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package io.github.s0cks.rapidjson.reflect;
 
 import java.io.ObjectInputStream;
@@ -5,12 +8,31 @@ import java.io.ObjectStreamClass;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UnsafeAllocator.
+ */
 abstract class UnsafeAllocator{
+    
+    /**
+     * New instance.
+     *
+     * @param <T> the generic type
+     * @param tClass the t class
+     * @return the t
+     * @throws Exception the exception
+     */
     public abstract <T> T newInstance(Class<T> tClass)
     throws Exception;
 
+    /** The instance. */
     private static UnsafeAllocator instance;
 
+    /**
+     * Instance.
+     *
+     * @return the unsafe allocator
+     */
     public static UnsafeAllocator instance(){
         if(instance == null){
             try{

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package io.github.s0cks.rapidjson.reflect;
 
 import io.github.s0cks.rapidjson.JsonException;
@@ -14,11 +17,28 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
+/**
+ * A factory for creating Instance objects.
+ */
 public final class InstanceFactory{
+    
+    /** The adapters. */
     private final Map<Type, TypeAdapter> adapters;
+    
+    /** The factories. */
     private final List<TypeAdapterFactory> factories;
+    
+    /** The json. */
     private final RapidJson json;
 
+    /**
+     * Instantiates a new instance factory.
+     *
+     * @param json the json
+     * @param adapters the adapters
+     * @param factories the factories
+     */
     public InstanceFactory(RapidJson json, Map<Type, TypeAdapter> adapters, List<TypeAdapterFactory> factories){
         this.json = json;
         this.adapters = adapters;
@@ -35,10 +55,25 @@ public final class InstanceFactory{
         this.factories.add(TypeAdapterFactories.ENUM_FACTORY);
     }
 
+    /**
+     * Gets the adapter.
+     *
+     * @param t the t
+     * @return the adapter
+     */
     public TypeAdapter<?> getAdapter(Type t){
         return this.getAdapter(new TypeToken(t));
     }
 
+    /**
+     * Emit.
+     *
+     * @param <T> the generic type
+     * @param t the t
+     * @param root the root
+     * @throws IllegalAccessException the illegal access exception
+     * @throws JsonException the json exception
+     */
     @SuppressWarnings("unchecked")
     public <T> void emit(T t, Value root)
     throws IllegalAccessException, JsonException {
@@ -63,10 +98,27 @@ public final class InstanceFactory{
         }
     }
 
+    /**
+     * Gets the field name.
+     *
+     * @param f the f
+     * @return the field name
+     */
     private String getFieldName(Field f){
         return f.isAnnotationPresent(SerializedName.class) ? f.getAnnotation(SerializedName.class).value() : f.getName();
     }
 
+    /**
+     * Emit field.
+     *
+     * @param <T> the generic type
+     * @param instance the instance
+     * @param f the f
+     * @param type the type
+     * @param root the root
+     * @throws IllegalAccessException the illegal access exception
+     * @throws JsonException the json exception
+     */
     @SuppressWarnings("unchecked")
     private <T> void emitField(T instance, Field f, Type type, Value root)
     throws IllegalAccessException, JsonException {
@@ -79,6 +131,13 @@ public final class InstanceFactory{
         }
     }
 
+    /**
+     * Gets the adapter.
+     *
+     * @param <T> the generic type
+     * @param token the token
+     * @return the adapter
+     */
     @SuppressWarnings("unchecked")
     private <T> TypeAdapter<T> getAdapter(TypeToken<T> token){
         if(this.adapters.containsKey(token.rawType)){
@@ -94,6 +153,17 @@ public final class InstanceFactory{
         return null;
     }
 
+    /**
+     * Creates the.
+     *
+     * @param <T> the generic type
+     * @param t the t
+     * @param value the value
+     * @return the t
+     * @throws IllegalAccessException the illegal access exception
+     * @throws JsonException the json exception
+     * @throws NoSuchFieldException the no such field exception
+     */
     @SuppressWarnings("unchecked")
     public <T> T create(TypeToken<T> t, Value value)
     throws IllegalAccessException, JsonException, NoSuchFieldException{
@@ -147,6 +217,16 @@ public final class InstanceFactory{
         return instance;
     }
 
+    /**
+     * Creates the.
+     *
+     * @param <T> the generic type
+     * @param tClass the t class
+     * @param value the value
+     * @return the t
+     * @throws IllegalAccessException the illegal access exception
+     * @throws NoSuchFieldException the no such field exception
+     */
     @SuppressWarnings("unchecked")
     public <T> T create(Class<T> tClass, Value value)
     throws IllegalAccessException, NoSuchFieldException {
@@ -201,6 +281,16 @@ public final class InstanceFactory{
         return instance;
     }
 
+    /**
+     * Sets the.
+     *
+     * @param <T> the generic type
+     * @param instance the instance
+     * @param raw the raw
+     * @param f the f
+     * @param value the value
+     * @throws IllegalAccessException the illegal access exception
+     */
     private static <T> void set(T instance, Type raw, Field f, Value value)
     throws IllegalAccessException {
         if(raw.equals(Types.TYPE_BOOLEAN)){
@@ -224,6 +314,12 @@ public final class InstanceFactory{
         }
     }
 
+    /**
+     * Checks if is generic.
+     *
+     * @param raw the raw
+     * @return true, if is generic
+     */
     private static boolean isGeneric(Type raw){
         return raw.equals(Types.TYPE_BOOLEAN)
             || raw.equals(Types.TYPE_BYTE)

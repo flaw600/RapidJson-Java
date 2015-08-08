@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package io.github.s0cks.rapidjson;
 
 import io.github.s0cks.rapidjson.io.JsonInputStream;
@@ -13,17 +16,43 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * {@code RapidJson} is a Java library that can be used to convert Java Objects into their JSON representation. 
+ * It can also be used to convert a JSON string to an equivalent Java object. RapidJson can work with 
+ * arbitrary Java objects including pre-existing objects lacking source code. Namely, it does so
+ * faster and more efficiently than Gson or boon. 
+ */
 public final class RapidJson{
+    
+    /** The instance factory. */
     private final InstanceFactory instanceFactory;
 
+    /**
+     * Instantiates a new default RapidJson.
+     */
     public RapidJson(){
         this.instanceFactory = new InstanceFactory(this, new HashMap<Type, TypeAdapter>(), new LinkedList<TypeAdapterFactory>());
     }
 
+    /**
+     * Instantiates a new custom RapidJson.
+     *
+     * @param builder the {@link RapidJsonBuilder}
+     */
     protected RapidJson(RapidJsonBuilder builder){
         this.instanceFactory = new InstanceFactory(this, builder.adapters, builder.factories);
     }
 
+    /**
+     * Returns a Java class from an existing JSON type.
+     *
+     * @param <T> the generic type
+     * @param json the existing JSON
+     * @param tClass the generic t class
+     * @return the Java class
+     * @throws JsonException the JSON exception
+     */
     public <T> T fromJson(String json, Class<T> tClass)
     throws JsonException{
         try {
@@ -33,6 +62,15 @@ public final class RapidJson{
         }
     }
 
+    /**
+     * Returns a Java class from an existing JSON type using {@link TypeToken}.
+     *
+     * @param <T> the generic type
+     * @param json the existing JSON
+     * @param t the t
+     * @return the Java class
+     * @throws JsonException the JSON exception
+     */
     public <T> T fromJson(String json, TypeToken<T> t)
     throws JsonException{
         try{
@@ -42,6 +80,15 @@ public final class RapidJson{
         }
     }
 
+    /**
+     * Returns a Java class from an existing JSON type using {@link InputStream} and {@link TypeToken}.
+     *
+     * @param <T> the generic type
+     * @param in the existing InputStream
+     * @param t the generic TypeToken
+     * @return the Java class
+     * @throws JsonException the json exception
+     */
     public <T> T fromJson(InputStream in, TypeToken<T> t)
     throws JsonException{
         try{
@@ -51,6 +98,15 @@ public final class RapidJson{
         }
     }
 
+    /**
+     * Returns a Java class from an existing JSON type using {@link InputStream}.
+     *
+     * @param <T> the generic type
+     * @param in the existing {@code InputStream}
+     * @param tClass the t class
+     * @return the Java class
+     * @throws JsonException the json exception
+     */
     public <T> T fromJson(InputStream in, Class<T> tClass)
     throws JsonException{
         try{
@@ -60,6 +116,13 @@ public final class RapidJson{
         }
     }
 
+    /**
+     * Converts an existing Java Class to a JSON representative. TODO
+     *
+     * @param obj the Java Object
+     * @return the string
+     * @throws JsonException the {@link JsonException} exception
+     */
     public String toJson(Object obj)
     throws JsonException{
         Value v = new Values.ObjectValue();

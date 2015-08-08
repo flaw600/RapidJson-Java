@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package io.github.s0cks.rapidjson.io;
 
 import io.github.s0cks.rapidjson.JsonException;
@@ -12,18 +15,42 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
+/**
+ * An Object that converts a {@link InputStream} to a JsonInputStream
+ */
 public final class JsonInputStream
 implements Closeable {
+    
+    /** The InputStream in. */
     private final InputStream in;
+    
+    /** The exit character for {@link . */
     private char peek = '\0';
+    
+    /** The name of the {@link JsonInputStream}. */
     private String name;
+    
+    /** The buffer. */
     private String buffer;
 
+    /**
+     * Instantiates a new JsonInputStream.
+     *
+     * @param in the InputStream to be converted
+     */
     public JsonInputStream(InputStream in){
         if(in == null) throw new NullPointerException("input == null");
         this.in = in;
     }
 
+    /**
+     * Parses the.
+     *
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JsonException Signals that a JSON Exception has occurred
+     */
     public Value parse()
     throws IOException, JsonException {
         switch(this.peek()){
@@ -36,6 +63,13 @@ implements Closeable {
         }
     }
 
+    /**
+     * Parses the object.
+     *
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JsonException Signals that a JSON Exception has occurred
+     */
     private Value parseObject()
     throws IOException, JsonException{
         Map<String, Value> values = new HashMap<>();
@@ -88,6 +122,13 @@ implements Closeable {
         return new Values.ObjectValue(values);
     }
 
+    /**
+     * Parses the array.
+     *
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JsonException Signals that a JSON Exception has occurred
+     */
     private Value parseArray()
     throws IOException, JsonException{
         List<Value> values = new LinkedList<>();
@@ -117,6 +158,13 @@ implements Closeable {
         return new Values.ArrayValue(values.toArray(new Value[values.size()]));
     }
 
+    /**
+     * Parses the number.
+     *
+     * @param c the c
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private Value parseNumber(char c)
     throws IOException{
         this.buffer = c + "";
@@ -126,12 +174,26 @@ implements Closeable {
         return new Values.NumberValue(new FlexibleNumber(this.buffer));
     }
 
+    /**
+     * Parses the null.
+     *
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private Value parseNull()
     throws IOException{
         this.skip(4);
         return Values.NullValue.NULL;
     }
 
+    /**
+     * Parses the boolean.
+     *
+     * @param c the c
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JsonException the json exception
+     */
     private Value parseBoolean(char c)
     throws IOException, JsonException {
         switch(c){
@@ -149,6 +211,12 @@ implements Closeable {
         }
     }
 
+    /**
+     * Parses the name.
+     *
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private String parseName()
     throws IOException{
         this.buffer = "";
@@ -159,6 +227,12 @@ implements Closeable {
         return this.buffer;
     }
 
+    /**
+     * Parses the string.
+     *
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private Value parseString()
     throws IOException{
         this.buffer = "";
@@ -194,6 +268,12 @@ implements Closeable {
         return new Values.StringValue(this.buffer);
     }
 
+    /**
+     * Skip.
+     *
+     * @param amount the amount
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void skip(int amount)
     throws IOException{
         for(int i = 0; i < amount; i++){
@@ -201,6 +281,12 @@ implements Closeable {
         }
     }
 
+    /**
+     * Next real.
+     *
+     * @return the char
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private char nextReal()
     throws IOException{
         char c;
@@ -208,6 +294,12 @@ implements Closeable {
         return c;
     }
 
+    /**
+     * Checks if is whitespace.
+     *
+     * @param c the c
+     * @return true, if is whitespace
+     */
     private boolean isWhitespace(char c){
         switch(c){
             case '\n':
@@ -222,6 +314,12 @@ implements Closeable {
         }
     }
 
+    /**
+     * Next.
+     *
+     * @return the char
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private char next()
     throws IOException{
         char ret;
@@ -237,6 +335,12 @@ implements Closeable {
         return ret;
     }
 
+    /**
+     * Peek.
+     *
+     * @return the char
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private char peek()
     throws IOException{
         if(this.peek != '\0') {
@@ -247,40 +351,68 @@ implements Closeable {
         return this.peek;
     }
 
+    /* (non-Javadoc)
+     * @see java.io.Closeable#close()
+     */
     @Override
     public void close()
     throws IOException {
         this.in.close();
     }
 
+    /**
+     * The Class FlexibleNumber.
+     */
     private static final class FlexibleNumber
     extends Number{
+        
+        /** The data. */
         private final String data;
 
+        /**
+         * Instantiates a new flexible number.
+         *
+         * @param data the data
+         */
         private FlexibleNumber(String data){
             this.data = data;
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Number#intValue()
+         */
         @Override
         public int intValue() {
             return Integer.valueOf(this.data);
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Number#longValue()
+         */
         @Override
         public long longValue() {
             return Long.valueOf(this.data);
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Number#floatValue()
+         */
         @Override
         public float floatValue() {
             return Float.valueOf(this.data);
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Number#doubleValue()
+         */
         @Override
         public double doubleValue() {
             return Double.valueOf(this.data);
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
         @Override
         public String toString(){
             return data;

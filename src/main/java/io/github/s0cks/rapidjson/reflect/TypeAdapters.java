@@ -1,9 +1,18 @@
+/*
+ * 
+ */
 package io.github.s0cks.rapidjson.reflect;
 
 import io.github.s0cks.rapidjson.Value;
 import io.github.s0cks.rapidjson.Values;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TypeAdapters.
+ */
 final class TypeAdapters{
+    
+    /** The Constant BOOLEAN_ADAPTER. */
     public static final TypeAdapter<Boolean> BOOLEAN_ADAPTER = new TypeAdapter<Boolean>() {
         @Override
         public Boolean deserialize(Class<Boolean> booleanClass, Value v) {
@@ -16,6 +25,7 @@ final class TypeAdapters{
         }
     };
 
+    /** The Constant INTEGER_ADAPTER. */
     public static final TypeAdapter<Integer> INTEGER_ADAPTER = new TypeAdapter<Integer>() {
         @Override
         public Integer deserialize(Class<Integer> integerClass, Value v) {
@@ -28,6 +38,7 @@ final class TypeAdapters{
         }
     };
 
+    /** The Constant STRING_ADAPTER. */
     public static final TypeAdapter<String> STRING_ADAPTER = new TypeAdapter<String>() {
         @Override
         public String deserialize(Class<String> stringClass, Value v) {
@@ -40,6 +51,7 @@ final class TypeAdapters{
         }
     };
 
+    /** The Constant SHORT_ADAPTER. */
     public static final TypeAdapter<Short> SHORT_ADAPTER = new TypeAdapter<Short>() {
         @Override
         public Short deserialize(Class<Short> shortClass, Value v) {
@@ -52,6 +64,7 @@ final class TypeAdapters{
         }
     };
 
+    /** The Constant DOUBLE_ADAPTER. */
     public static final TypeAdapter<Double> DOUBLE_ADAPTER = new TypeAdapter<Double>() {
         @Override
         public Double deserialize(Class<Double> doubleClass, Value v) {
@@ -64,6 +77,7 @@ final class TypeAdapters{
         }
     };
 
+    /** The Constant BYTE_ADAPTER. */
     public static final TypeAdapter<Byte> BYTE_ADAPTER = new TypeAdapter<Byte>() {
         @Override
         public Byte deserialize(Class<Byte> byteClass, Value v) {
@@ -76,6 +90,7 @@ final class TypeAdapters{
         }
     };
 
+    /** The Constant LONG_ADAPTER. */
     public static final TypeAdapter<Long> LONG_ADAPTER = new TypeAdapter<Long>() {
         @Override
         public Long deserialize(Class<Long> longClass, Value v) {
@@ -88,6 +103,7 @@ final class TypeAdapters{
         }
     };
 
+    /** The Constant FLOAT_ADAPTER. */
     public static final TypeAdapter<Float> FLOAT_ADAPTER = new TypeAdapter<Float>() {
         @Override
         public Float deserialize(Class<Float> floatClass, Value v) {

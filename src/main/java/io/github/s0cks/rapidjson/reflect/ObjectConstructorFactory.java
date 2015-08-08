@@ -1,10 +1,25 @@
+/*
+ * 
+ */
 package io.github.s0cks.rapidjson.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
+// TODO: Auto-generated Javadoc
+/**
+ * A factory for creating ObjectConstructor objects.
+ */
 final class ObjectConstructorFactory{
+    
+    /**
+     * Gets the.
+     *
+     * @param <T> the generic type
+     * @param token the token
+     * @return the object constructor
+     */
     public static <T> ObjectConstructor<T> get(TypeToken<T> token){
         Type type = token.type;
         Class<? super T> rawType = token.rawType;
@@ -18,6 +33,13 @@ final class ObjectConstructorFactory{
         return constructor;
     }
 
+    /**
+     * New default constructor.
+     *
+     * @param <T> the generic type
+     * @param rawType the raw type
+     * @return the object constructor
+     */
     public static <T> ObjectConstructor<T> newDefaultConstructor(Class<? super T> rawType){
         try{
             final Constructor<? super T> c = rawType.getDeclaredConstructor();
@@ -39,6 +61,14 @@ final class ObjectConstructorFactory{
         }
     }
 
+    /**
+     * New unsafe constructor.
+     *
+     * @param <T> the generic type
+     * @param type the type
+     * @param rawType the raw type
+     * @return the object constructor
+     */
     public static <T> ObjectConstructor<T> newUnsafeConstructor(final Type type, final Class<? super T> rawType){
         return new ObjectConstructor<T>() {
             @Override

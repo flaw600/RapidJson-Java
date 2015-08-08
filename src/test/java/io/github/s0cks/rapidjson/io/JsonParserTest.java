@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package io.github.s0cks.rapidjson.io;
 
 import io.github.s0cks.rapidjson.Value;
@@ -7,7 +10,17 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JsonParserTest.
+ */
 public class JsonParserTest {
+    
+    /**
+     * Test parse.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testParse()
     throws Exception {
