@@ -118,6 +118,14 @@ public final class RapidJson{
         }
     }
 
+    
+    /**
+     * Converts an existing Java Class to a JSON representative.
+     *
+     * @param obj the Java Object
+     * @return the string
+     * @throws JsonException the {@link JsonException} exception
+     */
     public String toJson(Object obj){
         try(StringOutputStream sos = new StringOutputStream();
             JsonOutputStream jos = new JsonOutputStream(sos)){
@@ -129,16 +137,27 @@ public final class RapidJson{
         }
     }
 
+    /**
+     * Extends {@link OutputStream} so that it outputs as a String via {@code char}. 
+     */
     private static final class StringOutputStream
     extends OutputStream{
+        
+        /** The string to be output. */
         private String str = "";
 
+        /* (non-Javadoc)
+         * @see java.io.OutputStream#write(int)
+         */
         @Override
         public void write(int i)
         throws IOException {
             this.str += (char) i;
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
         @Override
         public String toString(){
             return this.str;
