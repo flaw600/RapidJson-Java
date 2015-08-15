@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface SerializedName.
+ * The Interface SerializedName provides a Serial to the {@link RapidJson}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD })

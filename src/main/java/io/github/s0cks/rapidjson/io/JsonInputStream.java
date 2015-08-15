@@ -17,21 +17,21 @@ import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 /**
- * An Object that converts a {@link InputStream} to a JsonInputStream
+ * A Class that converts a {@link InputStream} to a JsonInputStream
  */
 public final class JsonInputStream
 implements Closeable {
     
-    /** The InputStream in. */
+    /** The InputStream to be parsed. */
     private final InputStream in;
     
-    /** The exit character for {@link . */
+    /** The placeholder for the current character being parsed . */
     private char peek = '\0';
     
-    /** The name of the {@link JsonInputStream}. */
+    /** The buffer for the name of the {@link JsonInputStream}. */
     private String name;
     
-    /** The buffer. */
+    /** The buffer for the current value being parsed. */
     private String buffer;
 
     /**
@@ -45,9 +45,9 @@ implements Closeable {
     }
 
     /**
-     * Parses the.
+     * Parses the {@link Value} based on whether the {@link #peek}.
      *
-     * @return the value
+     * @return the parsed Value
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws JsonException Signals that a JSON Exception has occurred
      */
@@ -64,9 +64,9 @@ implements Closeable {
     }
 
     /**
-     * Parses the object.
+     * Parses the Object.
      *
-     * @return the value
+     * @return the parsed Object
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws JsonException Signals that a JSON Exception has occurred
      */
@@ -125,7 +125,7 @@ implements Closeable {
     /**
      * Parses the array.
      *
-     * @return the value
+     * @return the parsed array
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws JsonException Signals that a JSON Exception has occurred
      */
@@ -162,7 +162,7 @@ implements Closeable {
      * Parses the number.
      *
      * @param c the c
-     * @return the value
+     * @return the parsed number
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private Value parseNumber(char c)
@@ -177,7 +177,7 @@ implements Closeable {
     /**
      * Parses the null.
      *
-     * @return the value
+     * @return the parsed null
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private Value parseNull()
@@ -190,7 +190,7 @@ implements Closeable {
      * Parses the boolean.
      *
      * @param c the c
-     * @return the value
+     * @return the parsed boolean
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws JsonException the json exception
      */
@@ -214,7 +214,7 @@ implements Closeable {
     /**
      * Parses the name.
      *
-     * @return the string
+     * @return the parsed name
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private String parseName()
@@ -230,7 +230,7 @@ implements Closeable {
     /**
      * Parses the string.
      *
-     * @return the value
+     * @return the parsed String
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private Value parseString()
@@ -269,7 +269,7 @@ implements Closeable {
     }
 
     /**
-     * Skip.
+     * Skips the designated amount of characters in {@link #in}.
      *
      * @param amount the amount
      * @throws IOException Signals that an I/O exception has occurred.
@@ -282,9 +282,9 @@ implements Closeable {
     }
 
     /**
-     * Next real.
+     * Checks whether the next character is a real, non-whitespace character and returns if it is.
      *
-     * @return the char
+     * @return the next real character
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private char nextReal()
@@ -297,7 +297,7 @@ implements Closeable {
     /**
      * Checks if is whitespace.
      *
-     * @param c the c
+     * @param c the character to be examined for whitespace
      * @return true, if is whitespace
      */
     private boolean isWhitespace(char c){
@@ -315,9 +315,9 @@ implements Closeable {
     }
 
     /**
-     * Next.
+     * Determines whether there is a next character.
      *
-     * @return the char
+     * @return the next character
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private char next()
@@ -336,9 +336,9 @@ implements Closeable {
     }
 
     /**
-     * Peek.
+     * Peeks at the current character to be parsed to determine Object state for {@link #parse()}.
      *
-     * @return the char
+     * @return the current character
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private char peek()
